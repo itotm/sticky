@@ -9,7 +9,7 @@ TAG_DEFINITIONS = {
     'monospace': {'family': 'Monospace'},
     'underline': {'underline': Pango.Underline.SINGLE},
     'strikethrough': {'strikethrough': True},
-    'highlight': {'background': 'yellow'},
+    'highlight': {'background': '#fde68a'},
     'link': {'underline': Pango.Underline.SINGLE, 'foreground': 'blue'},
     'header': {'scale': 1.5, 'weight': 500, 'pixels-above-lines': 14, 'pixels-below-lines': 4},
     'small': {'scale': .8333333333333},
@@ -844,7 +844,7 @@ class NoteBuffer(Gtk.TextBuffer):
     def add_bullet(self, a_iter):
         with self.internal_action():
             anchor = self.create_child_anchor(a_iter)
-            bullet = Gtk.Image(visible=True, icon_name='menu-bullet', pixel_size=16)
+            bullet = Gtk.Image(visible=True, icon_name='sticky-bullet', pixel_size=16)
             self.view.add_child_at_anchor(bullet, anchor)
 
             return ObjectInsertAction(self, anchor)

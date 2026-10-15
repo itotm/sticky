@@ -1,58 +1,58 @@
-@define-color red1 #ff8990; /* main */
-@define-color red2 #ff5561; /* title */
-@define-color red3 #ff5561; /* slider */
-@define-color red4 #ff8990; /* slider hover */
-@define-color red5 #ffc5ca; /* slider trough */
-@define-color red5 #ac2029; /* selection */
+@define-color red1 #ffd9dc; /* main */
+@define-color red2 #f6b3b8; /* title */
+@define-color red3 #eea2a8; /* slider */
+@define-color red4 #f6b3b8; /* slider hover */
+@define-color red5 #ffecee; /* slider trough */
+@define-color red6 #b8474f; /* selection */
 
-@define-color blue1 #81bdff; /* main */
-@define-color blue2 #3d9bff; /* title */
-@define-color blue3 #3d9bff; /* slider */
-@define-color blue4 #81bdff; /* slider hover */
-@define-color blue5 #bddbff; /* slider trough */
-@define-color blue5 #0f57a9; /* selection */
+@define-color blue1 #d6e8fc; /* main */
+@define-color blue2 #abcdf2; /* title */
+@define-color blue3 #97bfeb; /* slider */
+@define-color blue4 #abcdf2; /* slider hover */
+@define-color blue5 #ebf4fe; /* slider trough */
+@define-color blue6 #3b6fa8; /* selection */
 
-@define-color green1 #afffaf; /* main */
-@define-color green2 #67ff67; /* title */
-@define-color green3 #67ff67; /* slider */
-@define-color green4 #afffaf; /* slider hover */
-@define-color green5 #d7ffd7; /* slider trough */
-@define-color green5 #076707; /* selection */
+@define-color green1 #dcf5d6; /* main */
+@define-color green2 #b2e3a8; /* title */
+@define-color green3 #9dd892; /* slider */
+@define-color green4 #b2e3a8; /* slider hover */
+@define-color green5 #eefaeb; /* slider trough */
+@define-color green6 #3d7a34; /* selection */
 
-@define-color yellow1 #feff9f; /* main */
-@define-color yellow2 #f6f907; /* title */
-@define-color yellow3 #f6f907; /* slider */
-@define-color yellow4 #feff9f; /* slider hover */
-@define-color yellow5 #feffdb; /* slider trough */
-@define-color yellow5 #59591c; /* selection */
+@define-color yellow1 #fff6c4; /* main */
+@define-color yellow2 #f6e38e; /* title */
+@define-color yellow3 #ecd56e; /* slider */
+@define-color yellow4 #f6e38e; /* slider hover */
+@define-color yellow5 #fffbe2; /* slider trough */
+@define-color yellow6 #7a6a1f; /* selection */
 
-@define-color purple1 #c695ff; /* main */
-@define-color purple2 #a553ff; /* title */
-@define-color purple3 #a553ff; /* slider */
-@define-color purple4 #c695ff; /* slider hover */
-@define-color purple5 #dabdff; /* slider trough */
-@define-color purple5 #7722d3; /* selection */
+@define-color purple1 #e9dcfc; /* main */
+@define-color purple2 #cdb4f2; /* title */
+@define-color purple3 #bea0ec; /* slider */
+@define-color purple4 #cdb4f2; /* slider hover */
+@define-color purple5 #f4eefe; /* slider trough */
+@define-color purple6 #6a43a8; /* selection */
 
-@define-color teal1 #affff8; /* main */
-@define-color teal2 #41ffed; /* title */
-@define-color teal3 #41ffed; /* slider */
-@define-color teal4 #affff8; /* slider hover */
-@define-color teal5 #cdfffb; /* slider trough */
-@define-color teal5 #07645c; /* selection */
+@define-color teal1 #d4f4ef; /* main */
+@define-color teal2 #a3e0d7; /* title */
+@define-color teal3 #8cd4ca; /* slider */
+@define-color teal4 #a3e0d7; /* slider hover */
+@define-color teal5 #eafaf7; /* slider trough */
+@define-color teal6 #2f7a70; /* selection */
 
-@define-color orange1 #ffc47b; /* main */
-@define-color orange2 #ffa939; /* title */
-@define-color orange3 #ffa939; /* slider */
-@define-color orange4 #ffc47b; /* slider hover */
-@define-color orange5 #ffe3b9; /* slider trough */
-@define-color orange5 #804d0a; /* selection */
+@define-color orange1 #ffe6cc; /* main */
+@define-color orange2 #f9c995; /* title */
+@define-color orange3 #f3b77a; /* slider */
+@define-color orange4 #f9c995; /* slider hover */
+@define-color orange5 #fff3e6; /* slider trough */
+@define-color orange6 #9a5a1c; /* selection */
 
-@define-color magenta1 #ffb9fb; /* main */
-@define-color magenta2 #ff7ff7; /* title */
-@define-color magenta3 #ff7ff7; /* slider */
-@define-color magenta4 #ffb9fb; /* slider hover */
-@define-color magenta5 #ffd7fd; /* slider trough */
-@define-color magenta5 #9d1094; /* selection */
+@define-color magenta1 #fbdcf8; /* main */
+@define-color magenta2 #efb3e9; /* title */
+@define-color magenta3 #e69ee0; /* slider */
+@define-color magenta4 #efb3e9; /* slider hover */
+@define-color magenta5 #fdeefc; /* slider trough */
+@define-color magenta6 #94408c; /* selection */
 
 /* manager */
 #manager-group-edit-button,
@@ -65,14 +65,73 @@
     padding: 0 5px;
 }
 
+/* KDE-style manager: flat toolbar under the KWin title bar, sidebar like the Places panel */
+#manager-toolbar {
+    padding: 4px 6px;
+}
+
+#manager-sidebar,
+#manager-group-list,
+stacksidebar list {
+    background-color: transparent;
+}
+
+#manager-group-list,
+stacksidebar list {
+    padding: 4px 0;
+}
+
+#manager-group-list row,
+stacksidebar row {
+    margin: 1px 6px;
+    border-radius: 4px;
+    background-color: transparent;
+}
+
+#manager-group-list row:hover,
+stacksidebar row:hover {
+    background-color: alpha(@theme_selected_bg_color, 0.12);
+}
+
+#manager-group-list row:selected,
+stacksidebar row:selected {
+    background-color: alpha(@theme_selected_bg_color, 0.25);
+    box-shadow: inset 0 0 0 1px alpha(@theme_selected_bg_color, 0.8);
+    color: @theme_fg_color;
+}
+
+.note-preview {
+    border-radius: 6px;
+}
+
+.note-preview #title-bar {
+    border-radius: 6px 6px 0 0;
+}
+
+/* notes: rounded corners like the Breeze window decoration */
 #sticky-note decoration {
-    box-shadow: 0 3px 9px 1px transparent, 0 2px 6px 2px rgba(0, 0, 0, 0.5);
+    border-radius: 6px;
+    box-shadow: 0 3px 14px 1px rgba(0, 0, 0, 0.30), 0 0 0 1px rgba(0, 0, 0, 0.12);
 }
 
 #sticky-note decoration:backdrop {
-    box-shadow: 0 3px 9px 1px transparent, 0 2px 6px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 10px 1px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(0, 0, 0, 0.08);
 }
 
+#sticky-note,
+#sticky-note scrolledwindow,
+#sticky-note textview {
+    background-color: transparent;
+    border-radius: 0 0 6px 6px;
+}
+
+#sticky-note #title-bar {
+    border-radius: 6px 6px 0 0;
+}
+
+#sticky-note textview text {
+    border-radius: 0 0 6px 6px;
+}
 
 #title-bar {
     padding-left: 10px;
@@ -135,9 +194,9 @@ textview text {
     background-color: transparent;
     background-image: none;
     background-size: 0;
-    padding: 0px 0px 0px 0px;
+    padding: 2px;
     border: none;
-    border-radius: 12px;
+    border-radius: 4px;
 }
 
 #dummy-window {
@@ -153,7 +212,7 @@ button.red {
 }
 
 .red textview text selection {
-    background-color: @red5;
+    background-color: @red6;
 }
 
 .red #title-bar {
@@ -192,7 +251,7 @@ button.blue {
 }
 
 .blue textview text selection {
-    background-color: @blue5;
+    background-color: @blue6;
 }
 
 .blue #title-bar {
@@ -231,7 +290,7 @@ button.green {
 }
 
 .green textview text selection {
-    background-color: @green5;
+    background-color: @green6;
 }
 
 .green #title-bar {
@@ -270,7 +329,7 @@ button.yellow {
 }
 
 .yellow textview text selection {
-    background-color: @yellow5;
+    background-color: @yellow6;
 }
 
 .yellow #title-bar {
@@ -309,7 +368,7 @@ button.purple {
 }
 
 .purple textview text selection {
-    background-color: @purple5;
+    background-color: @purple6;
 }
 
 .purple #title-bar {
@@ -348,7 +407,7 @@ button.teal {
 }
 
 .teal textview text selection {
-    background-color: @teal5;
+    background-color: @teal6;
 }
 
 .teal #title-bar {
@@ -387,7 +446,7 @@ button.orange {
 }
 
 .orange textview text selection {
-    background-color: @orange5;
+    background-color: @orange6;
 }
 
 .orange #title-bar {
@@ -426,7 +485,7 @@ button.magenta {
 }
 
 .magenta textview text selection {
-    background-color: @magenta5;
+    background-color: @magenta6;
 }
 
 .magenta #title-bar {

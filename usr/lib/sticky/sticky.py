@@ -64,14 +64,14 @@ COLORS = {
 }
 
 COLOR_CODES = {
-    'red': "#ff5561",
-    'green': "#67ff67",
-    'blue': "#3d9bff",
-    'yellow': "#f6f907",
-    'purple': "#a553ff",
-    'teal': "#41ffed",
-    'orange': "#ffa939",
-    'magenta': "#ff7ff7"
+    'red': "#eea2a8",
+    'green': "#9dd892",
+    'blue': "#97bfeb",
+    'yellow': "#ecd56e",
+    'purple': "#bea0ec",
+    'teal': "#8cd4ca",
+    'orange': "#f3b77a",
+    'magenta': "#e69ee0"
 }
 
 SHORTCUTS = {
@@ -496,7 +496,7 @@ class Note(Gtk.Window):
         menu.append(strikethrough_item)
 
         highlight_item = Gtk.MenuItem(label=_("Highlight"), visible=True)
-        highlight_item.get_child().set_markup("<span background='yellow' foreground='black'>%s</span>" % _("Highlight"))
+        highlight_item.get_child().set_markup("<span background='#fde68a' foreground='black'>%s</span>" % _("Highlight"))
         highlight_item.connect('activate', self.apply_format, 'highlight')
         menu.append(highlight_item)
 
@@ -1224,7 +1224,7 @@ class Application(Gtk.Application):
         dlg.set_version("__DEB_VERSION__")
         dlg.set_icon_name("sticky")
         dlg.set_logo_icon_name("sticky")
-        dlg.set_website("https://www.github.com/linuxmint/sticky")
+        dlg.set_website("https://github.com/itotm/sticky")
         def close(w, res):
             if res == Gtk.ResponseType.CANCEL or res == Gtk.ResponseType.DELETE_EVENT:
                 w.destroy()
