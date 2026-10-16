@@ -256,6 +256,11 @@ class Note(Gtk.Window):
         self.buffer.test()
 
     def on_size_position_changed(self, *args):
+        # hiding a note emits a configure-event with stale geometry (the last
+        # requested position, not where the user moved it), so ignore it
+        if not self.get_visible():
+            return
+
         if self.showing:
             self.showing = False
             return
