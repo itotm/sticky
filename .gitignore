@@ -8,3 +8,4 @@ debian/*.log
 usr/share/locale/
 dist/
 __pycache__/
+.flatpak-builder/

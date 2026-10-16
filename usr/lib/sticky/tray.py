@@ -10,6 +10,8 @@ import os
 
 from gi.repository import Gio, GLib, Gtk, XApp
 
+from common import IN_FLATPAK, get_flatpak_info
+
 WATCHER_NAME = 'org.kde.StatusNotifierWatcher'
 WATCHER_PATH = '/StatusNotifierWatcher'
 ITEM_PATH = '/StatusNotifierItem'
@@ -159,16 +161,28 @@ class StatusNotifierIcon(object):
         self.item_id = connection.register_object(ITEM_PATH, item_info, self.on_item_call, self.get_item_property, None)
         self.menu_id = connection.register_object(MENU_PATH, menu_info, self.on_menu_call, self.get_menu_property, None)
 
-        self.bus_name = 'org.kde.StatusNotifierItem-%d-1' % os.getpid()
-        self.own_id = Gio.bus_own_name_on_connection(connection, self.bus_name, Gio.BusNameOwnerFlags.NONE,
-                                                     self.on_name_acquired, None)
+        if IN_FLATPAK:
+            # PIDs in the sandbox start from 1, so the usual name can be taken by
+            # another Flatpak; the watcher accepts the unique name as well. The
+            # panel finds the icons, which aren't exported, in the app's files.
+            self.bus_name = connection.get_unique_name()
+            self.own_id = 0
+            self.name_acquired = True
+            app_path = get_flatpak_info('Instance', 'app-path')
+            self.icon_theme_path = os.path.join(app_path, 'share', 'icons') if app_path else ''
+        else:
+            self.bus_name = 'org.kde.StatusNotifierItem-%d-1' % os.getpid()
+            self.own_id = Gio.bus_own_name_on_connection(connection, self.bus_name, Gio.BusNameOwnerFlags.NONE,
+                                                         self.on_name_acquired, None)
+            self.icon_theme_path = ''
         # Plasma registers its watcher again when plasmashell restarts
         self.watch_id = Gio.bus_watch_name_on_connection(connection, WATCHER_NAME, Gio.BusNameWatcherFlags.NONE,
                                                          self.on_watcher_appeared, self.on_watcher_vanished)
 
     def destroy(self):
         Gio.bus_unwatch_name(self.watch_id)
-        Gio.bus_unown_name(self.own_id)
+        if self.own_id:
+            Gio.bus_unown_name(self.own_id)
         self.connection.unregister_object(self.item_id)
         self.connection.unregister_object(self.menu_id)
 
@@ -210,6 +224,8 @@ class StatusNotifierIcon(object):
             return GLib.Variant('i', 0)
         elif name == 'IconName':
             return GLib.Variant('s', self.icon_name)
+        elif name == 'IconThemePath':
+            return GLib.Variant('s', self.icon_theme_path)
         elif name == 'ToolTip':
             return GLib.Variant('(sa(iiay)ss)', (self.icon_name, [], self.title, self.body.replace('\n', '<br/>')))
         elif name == 'ItemIsMenu':
@@ -217,7 +233,7 @@ class StatusNotifierIcon(object):
         elif name == 'Menu':
             return GLib.Variant('o', MENU_PATH)
 
-        # IconThemePath and the overlay and attention icons are unused
+        # The overlay and attention icons are unused
         return GLib.Variant('s', '')
 
     def on_item_call(self, connection, sender, path, interface, method, params, invocation, user_data=None):

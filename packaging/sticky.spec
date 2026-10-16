@@ -1,6 +1,6 @@
 Name:           sticky
 Version:        1.33
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Sticky notes app with a KDE-style look
 
 License:        GPL-2.0-only
@@ -62,6 +62,10 @@ desktop-file-validate %{buildroot}%{_sysconfdir}/xdg/autostart/sticky.desktop
 %config(noreplace) %{_sysconfdir}/xdg/autostart/sticky.desktop
 
 %changelog
+* Fri Oct 16 2026 itotm <1804363+itotm@users.noreply.github.com> - 1.33-4
+- Find the data files from the install prefix, for the new Flatpak build
+- Native file dialogs for import and export
+
 * Fri Oct 16 2026 itotm <1804363+itotm@users.noreply.github.com> - 1.33-3
 - Notes reopen where they were moved instead of at their old position
 - Notes no longer grow by the shadow size each time they are hidden and shown

@@ -1,3 +1,10 @@
+sticky (1.33+kde3) trixie; urgency=medium
+
+  * Find the data files from the install prefix, for the new Flatpak build
+  * Native file dialogs for import and export
+
+ -- itotm <1804363+itotm@users.noreply.github.com>  Fri, 16 Oct 2026 13:11:12 +0200
+
 sticky (1.33+kde2) trixie; urgency=medium
 
   * Notes reopen where they were moved instead of at their old position

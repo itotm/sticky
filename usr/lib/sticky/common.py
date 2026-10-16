@@ -7,7 +7,28 @@ import re
 
 from gi.repository import Gio, GLib, GObject, Gtk
 
-CONFIG_DIR = os.path.join(GLib.get_user_config_dir(), 'sticky')
+# The install prefix, /usr for the packages and /app in the Flatpak
+PREFIX = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+DATA_DIR = os.path.join(PREFIX, 'share', 'sticky')
+LOCALE_DIR = os.path.join(PREFIX, 'share', 'locale')
+
+FLATPAK_INFO_PATH = '/.flatpak-info'
+IN_FLATPAK = os.path.exists(FLATPAK_INFO_PATH)
+
+def get_flatpak_info(group, key):
+    info = GLib.KeyFile()
+    try:
+        info.load_from_file(FLATPAK_INFO_PATH, GLib.KeyFileFlags.NONE)
+        return info.get_string(group, key)
+    except GLib.Error:
+        return None
+
+# The Flatpak keeps the notes in the host's config directory, which it is
+# allowed to use, so it shares them with the packaged version
+if IN_FLATPAK:
+    CONFIG_DIR = os.path.join(os.environ.get('HOST_XDG_CONFIG_HOME') or os.path.join(GLib.get_home_dir(), '.config'), 'sticky')
+else:
+    CONFIG_DIR = os.path.join(GLib.get_user_config_dir(), 'sticky')
 CONFIG_PATH = os.path.join(CONFIG_DIR, 'notes.json')
 SAVE_DELAY = 3
 
@@ -147,8 +168,9 @@ class FileHandler(GObject.Object):
                 os.remove(os.path.join(CONFIG_DIR, file))
 
     def export_notes(self, menuitem, window):
-        file_dialog = Gtk.FileChooserDialog(title=_("Export..."), action=Gtk.FileChooserAction.SAVE, transient_for=window)
-        file_dialog.add_buttons(_("Cancel"), Gtk.ResponseType.CANCEL, _("Save"), Gtk.ResponseType.OK)
+        # A native dialog, so that the Flatpak gets the files through the portal
+        file_dialog = Gtk.FileChooserNative(title=_("Export..."), action=Gtk.FileChooserAction.SAVE, transient_for=window,
+                                            accept_label=_("Save"), cancel_label=_("Cancel"))
         file_dialog.set_current_folder(GLib.get_home_dir())
         file_dialog.set_current_name('notes.json')
         file_dialog.set_do_overwrite_confirmation(True)
@@ -164,15 +186,15 @@ class FileHandler(GObject.Object):
         file_dialog.add_filter(text_filter)
 
         response = file_dialog.run()
-        if response == Gtk.ResponseType.OK:
+        if response == Gtk.ResponseType.ACCEPT:
             file = file_dialog.get_filename()
             self.save_to_file(file)
 
         file_dialog.destroy()
 
     def import_notes(self, menuitem, window):
-        file_dialog = Gtk.FileChooserDialog(title=_("Import..."), action=Gtk.FileChooserAction.OPEN, transient_for=self.window)
-        file_dialog.add_buttons(_("Cancel"), Gtk.ResponseType.CANCEL, _("Open"), Gtk.ResponseType.OK)
+        file_dialog = Gtk.FileChooserNative(title=_("Import..."), action=Gtk.FileChooserAction.OPEN, transient_for=self.window,
+                                            accept_label=_("Open"), cancel_label=_("Cancel"))
         file_dialog.set_current_folder(GLib.get_home_dir())
 
         json_filter = Gtk.FileFilter()
@@ -186,7 +208,7 @@ class FileHandler(GObject.Object):
         file_dialog.add_filter(text_filter)
 
         response = file_dialog.run()
-        if response == Gtk.ResponseType.OK:
+        if response == Gtk.ResponseType.ACCEPT:
             file_path = file_dialog.get_filename()
             if file_path is not None:
                 self.load_notes_from_path(file_path, window)

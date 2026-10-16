@@ -1,0 +1,108 @@
+# Built by packaging/build-flatpak.sh, which puts the sources in sticky/ next to
+# this file with the version filled in.
+app-id: io.github.itotm.Sticky
+runtime: org.gnome.Platform
+runtime-version: '51'
+sdk: org.gnome.Sdk
+command: sticky
+rename-desktop-file: sticky.desktop
+rename-icon: sticky
+# The app and its tray icon use the icons by their own names
+copy-icon: true
+# A bundle can't carry the Locale extension, so the translations stay in the app
+separate-locales: false
+finish-args:
+  - --share=ipc
+  # Notes are placed with X11 coordinates, as the packages do through XWayland
+  - --socket=x11
+  # The notes are shared with the packaged version
+  - --filesystem=xdg-config/sticky:create
+  # And so are the settings, in dconf
+  - --filesystem=xdg-run/dconf
+  - --filesystem=~/.config/dconf:ro
+  - --talk-name=ca.desrt.dconf
+  - --env=DCONF_USER_CONFIG_DIR=.config/dconf
+  - --env=GIO_EXTRA_MODULES=/app/lib/gio/modules
+  - --env=GSETTINGS_BACKEND=dconf
+  # Gio.Application and the D-Bus interface keep the packages' name
+  - --own-name=org.x.sticky
+  - --talk-name=org.kde.StatusNotifierWatcher
+  # XApp's tray icon, used on desktops without a StatusNotifierItem host
+  - --own-name=org.x.StatusIcon.sticky
+  - --talk-name=org.x.StatusIconMonitor.*
+cleanup:
+  - /include
+  - /lib/pkgconfig
+  - /share/gir-1.0
+  - /share/vala
+  - /share/doc
+  - /share/gtk-doc
+  - /share/icons/hicolor/icon-theme.cache
+  # Autostart goes through the Background portal, and D-Bus activation needs a
+  # service named after the app id
+  - /etc
+  - /share/dbus-1
+modules:
+  # Only its GSettings backend, which the runtime doesn't have; the host's
+  # dconf service does the writing
+  - name: dconf
+    buildsystem: meson
+    config-opts:
+      - -Dbash_completion=false
+      - -Dman=false
+      - -Dvapi=false
+      - -Dsystemduserunitdir=/app/lib/systemd/user
+    cleanup:
+      - /bin
+      - /libexec
+      - /lib/systemd
+    sources:
+      - type: archive
+        url: https://download.gnome.org/sources/dconf/0.49/dconf-0.49.0.tar.xz
+        sha256: 16a47e49a58156dbb96578e1708325299e4c19eea9be128d5bd12fd0963d6c36
+      # For DCONF_USER_CONFIG_DIR
+      - type: patch
+        path: dconf-user-config-dir.patch
+
+  - name: gspell
+    buildsystem: meson
+    config-opts:
+      - -Dgspell_app=false
+      - -Dvapi=false
+      - -Dgtk_doc=false
+      - -Dtests=false
+      - -Dinstall_tests=false
+    sources:
+      - type: archive
+        url: https://download.gnome.org/sources/gspell/1.14/gspell-1.14.5.tar.xz
+        sha256: 788783b56fc3d03283b3aa29302d0b958aeca88835e10b1ec61f19e0efc7e8a4
+
+  - name: xapp
+    buildsystem: meson
+    config-opts:
+      - -Dapp-lib-only=true
+      - -Dpy-overrides-dir=/app/lib/python3.14/site-packages/gi/overrides
+    sources:
+      - type: git
+        url: https://github.com/linuxmint/xapp.git
+        tag: 3.2.2
+        commit: 913b2a2b441ec24daf3aa92e2863cc40e1c43650
+
+  - name: python-xapp
+    buildsystem: meson
+    sources:
+      - type: git
+        url: https://github.com/linuxmint/python-xapp.git
+        tag: 3.0.2
+        commit: 83bf6f48ebf7314ae2be6450b7987f0422816f54
+
+  - name: sticky
+    buildsystem: meson
+    # Runs in the meson build directory
+    post-install:
+      - install -Dm644 ../io.github.itotm.Sticky.metainfo.xml -t /app/share/metainfo
+    sources:
+      - type: dir
+        path: sticky
+      - type: file
+        path: io.github.itotm.Sticky.metainfo.xml

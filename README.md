@@ -46,6 +46,33 @@ packaging/build-deb.sh [debian release]   # default: 13, output in dist/
 
 The package uses the `debian/` directory. For a new release add an entry at the top of `debian/changelog` with the version `<meson version>+kde<n>`, for example `1.33+kde2`; the script refuses to build if it does not match `meson.build`.
 
+## Install as a Flatpak
+
+On any distribution, and on Fedora Atomic desktops without layering a package, download the .flatpak from the [releases](https://github.com/itotm/sticky/releases) and install it:
+
+```
+flatpak install ./sticky-*.x86_64.flatpak
+```
+
+It uses the GNOME 51 runtime from Flathub, which gets installed with it. A bundle doesn't update itself: install the new one from a later release.
+
+The Flatpak uses the same notes (`~/.config/sticky`) and settings (dconf) as the RPM and the .deb, so switching between them keeps everything. Only one of them runs at a time: starting the other one opens the one already running. Keep one of them installed, or both start at login when "Start automatically" is on. The Flatpak sets up its autostart through the desktop portal, in `~/.config/autostart/io.github.itotm.Sticky.desktop`.
+
+Spell checking uses the dictionaries of the Flatpak runtime, which come only for the languages Flatpak is set to. To add Italian, for example:
+
+```
+sudo flatpak config --set extra-languages it && flatpak update
+```
+
+To build the bundle, with flatpak-builder or the one from Flathub:
+
+```
+flatpak install flathub org.flatpak.Builder org.gnome.Sdk//51
+packaging/build-flatpak.sh   # output in dist/, same version as the RPM
+```
+
+The manifest is in `packaging/flatpak/`. The app id is `io.github.itotm.Sticky`, while the D-Bus name and the settings schema stay `org.x.sticky` like the packages.
+
 The upstream README follows.
 
 # Sticky (upstream)

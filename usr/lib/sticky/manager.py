@@ -1,8 +1,10 @@
 #!/usr/bin/python3
 
+import os
+
 from gi.repository import Gdk, Gio, GLib, GObject, Gtk, Pango, XApp
 from note_buffer import NoteBuffer
-from common import HoverBox
+from common import HoverBox, DATA_DIR
 from util import clean_text
 
 NOTE_TARGETS = [Gtk.TargetEntry.new('note-entry', Gtk.TargetFlags.SAME_APP, 1)]
@@ -235,7 +237,7 @@ class NotesManager(object):
 
         self.builder = Gtk.Builder()
         self.builder.set_translation_domain("sticky")
-        self.builder.add_from_file('/usr/share/sticky/manager.ui')
+        self.builder.add_from_file(os.path.join(DATA_DIR, 'manager.ui'))
 
         self.window = self.builder.get_object('main_window')
         self.group_list = self.builder.get_object('group_list')

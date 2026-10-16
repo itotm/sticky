@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.itotm.Sticky</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0-only</project_license>
+  <name>Sticky</name>
+  <summary>Sticky notes with a KDE-style look</summary>
+  <developer id="io.github.itotm">
+    <name>itotm</name>
+  </developer>
+  <description>
+    <p>
+      Sticky notes on the desktop, with groups, a manager window, formatting,
+      checklists, backups and a tray icon. Linux Mint's Sticky, changed to fit a
+      KDE Plasma desktop: notes with rounded corners like Breeze windows, a manager
+      with the KWin title bar, a toolbar like the KDE applications, softer note
+      colors and freedesktop icon names.
+    </p>
+  </description>
+  <launchable type="desktop-id">io.github.itotm.Sticky.desktop</launchable>
+  <url type="homepage">https://github.com/itotm/sticky</url>
+  <url type="bugtracker">https://github.com/itotm/sticky/issues</url>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/itotm/sticky/master/docs/screenshot.png</image>
+    </screenshot>
+  </screenshots>
+  <content_rating type="oars-1.1"/>
+  <releases>
+    <release version="@VERSION@" date="@DATE@"/>
+  </releases>
+</component>

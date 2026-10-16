@@ -1,0 +1,19 @@
+--- a/engine/dconf-engine-source-user.c
++++ b/engine/dconf-engine-source-user.c
+@@ -43,7 +43,15 @@
+   /* This can fail in the normal case of the user not having any
+    * settings.  That's OK and it shouldn't be considered as an error.
+    */
+-  filename = g_build_filename (g_get_user_config_dir (), "dconf", name, NULL);
++  /* In a Flatpak this points to the host's dconf directory, relative to the
++   * home directory, as the patched dconf of the older Flatpak runtimes did.
++   */
++  const gchar *user_config_dir = g_getenv ("DCONF_USER_CONFIG_DIR");
++
++  if (user_config_dir != NULL)
++    filename = g_build_filename (g_get_home_dir (), user_config_dir, name, NULL);
++  else
++    filename = g_build_filename (g_get_user_config_dir (), "dconf", name, NULL);
+   table = gvdb_table_new (filename, FALSE, NULL);
+   g_free (filename);
+ 

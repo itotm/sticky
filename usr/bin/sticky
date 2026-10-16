@@ -1,4 +1,5 @@
 #!/bin/bash
 
 export GDK_BACKEND="x11"
-/usr/lib/sticky/sticky.py $*
+# lib/sticky next to this bin directory: /usr for the packages, /app in the Flatpak
+"$(dirname "$(readlink -f "$0")")"/../lib/sticky/sticky.py "$@"

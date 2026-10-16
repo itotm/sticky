@@ -15,15 +15,18 @@ from xapp.GSettingsWidgets import *
 
 from note_buffer import NoteBuffer
 from manager import NotesManager
-from common import FileHandler, HoverBox, prompt, confirm
+from common import FileHandler, HoverBox, prompt, confirm, DATA_DIR, IN_FLATPAK, LOCALE_DIR
 from tray import create_tray_icon
 from util import gnote_to_internal_format
 
 import gettext
-gettext.install("sticky", "/usr/share/locale", names="ngettext")
+import locale
+gettext.install("sticky", LOCALE_DIR, names="ngettext")
+# For the strings in manager.ui
+locale.bindtextdomain("sticky", LOCALE_DIR)
 
 APPLICATION_ID = 'org.x.sticky'
-STYLE_SHEET_PATH = '/usr/share/sticky/sticky.css'
+STYLE_SHEET_PATH = os.path.join(DATA_DIR, 'sticky.css')
 SCHEMA = 'org.x.sticky'
 DBUS_PATH = '/org/x/sticky'
 DBUS_INTERFACE_XML = '''
@@ -788,6 +791,12 @@ class Application(Gtk.Application):
         self.settings.connect('changed::active-group', self.on_active_group_changed)
         self.update_dummy_window()
 
+        # The packages start through /etc/xdg/autostart, which the Flatpak can't install
+        if IN_FLATPAK:
+            self.settings.connect('changed::autostart', self.update_autostart)
+            if self.settings.get_boolean('autostart'):
+                self.update_autostart()
+
         self.note_group = self.settings.get_string('active-group')
         group_names = self.file_handler.get_note_group_names()
         if self.note_group not in group_names:
@@ -849,6 +858,16 @@ class Application(Gtk.Application):
 
         elif method_name == 'ReloadNotesFromFile':
             self.reload_notes_from_file()
+
+    def update_autostart(self, *args):
+        options = {
+            'autostart': GLib.Variant('b', self.settings.get_boolean('autostart')),
+            'commandline': GLib.Variant('as', ['sticky', '--autostart']),
+        }
+        self.get_dbus_connection().call('org.freedesktop.portal.Desktop', '/org/freedesktop/portal/desktop',
+                                        'org.freedesktop.portal.Background', 'RequestBackground',
+                                        GLib.Variant('(sa{sv})', ('', options)), GLib.VariantType('(o)'),
+                                        Gio.DBusCallFlags.NONE, -1, None, None)
 
     def first_run(self):
         gnote_dir = os.path.join(GLib.get_user_data_dir(), 'gnote')
