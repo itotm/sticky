@@ -1,3 +1,17 @@
+sticky (1.33+kde1) trixie; urgency=medium
+
+  * First build for Debian 13, based on Linux Mint's Sticky 1.33
+  * Notes with rounded corners and a softer shadow, like Breeze windows
+  * Softer, pastel note colors and highlight
+  * Manager with the KWin title bar and a KDE-style toolbar instead of the
+    GTK header bar
+  * Freedesktop icon names instead of the xsi icons
+  * Tray icon as a StatusNotifierItem with a native Plasma menu; clicks on
+    the XEmbed icon got lost under Wayland
+  * Call the app Sticky in every language
+
+ -- itotm <1804363+itotm@users.noreply.github.com>  Fri, 16 Oct 2026 10:00:00 +0200
+
 sticky (1.33) adrien; urgency=medium
 
   [ Balló György ]

@@ -1,6 +1,6 @@
 Name:           sticky
 Version:        1.33
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Sticky notes app with a KDE-style look
 
 License:        GPL-2.0-only
@@ -62,6 +62,11 @@ desktop-file-validate %{buildroot}%{_sysconfdir}/xdg/autostart/sticky.desktop
 %config(noreplace) %{_sysconfdir}/xdg/autostart/sticky.desktop
 
 %changelog
+* Fri Oct 16 2026 itotm <1804363+itotm@users.noreply.github.com> - 1.33-2
+- Tray icon as a StatusNotifierItem with a native Plasma menu; clicks on the
+  XEmbed icon got lost under Wayland
+- Call the app Sticky in every language
+
 * Thu Oct 15 2026 itotm <1804363+itotm@users.noreply.github.com> - 1.33-1
 - First build for Fedora, based on Linux Mint's Sticky 1.33
 - Notes with rounded corners and a softer shadow, like Breeze windows

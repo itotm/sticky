@@ -16,6 +16,7 @@ from xapp.GSettingsWidgets import *
 from note_buffer import NoteBuffer
 from manager import NotesManager
 from common import FileHandler, HoverBox, prompt, confirm
+from tray import create_tray_icon
 from util import gnote_to_internal_format
 
 import gettext
@@ -693,7 +694,6 @@ class Application(Gtk.Application):
         self.notes_hidden = False
         self.autostart_mode = False # indicates if we're in autostart mode
         self.dbus_register_id = 0
-        self.group_buttons = {}
 
         self.add_main_option(
             'autostart',
@@ -757,7 +757,7 @@ class Application(Gtk.Application):
 
         self.settings = Gio.Settings(schema_id=SCHEMA)
 
-        self.dummy_window = Gtk.Window(title=_("Notes"), default_height=1, default_width=1, decorated=False, deletable=False, name='dummy-window')
+        self.dummy_window = Gtk.Window(title="Sticky", default_height=1, default_width=1, decorated=False, deletable=False, name='dummy-window')
         self.dummy_window.show()
 
         self.file_handler = FileHandler(self.settings, self.dummy_window)
@@ -780,7 +780,7 @@ class Application(Gtk.Application):
 
         self.settings.connect('changed::show-in-tray', self.update_tray_icon)
         self.settings.connect('changed::show-in-taskbar', self.update_dummy_window)
-        self.active_group_changed_id = self.settings.connect('changed::active-group', self.on_active_group_changed)
+        self.settings.connect('changed::active-group', self.on_active_group_changed)
         self.update_dummy_window()
 
         self.note_group = self.settings.get_string('active-group')
@@ -858,7 +858,7 @@ class Application(Gtk.Application):
                     import_notes.append(path)
 
             if len(import_notes) > 0:
-                resp = confirm(_("Notes"),
+                resp = confirm("Sticky",
                                _("Would you like to import your notes from Gnote? This will not change your Gnote notes in any way."),
                                window=self.dummy_window)
 
@@ -887,74 +887,38 @@ class Application(Gtk.Application):
         self.settings.set_boolean('first-run', False)
 
     def create_status_icon(self):
-        self.status_icon = XApp.StatusIcon()
-        self.status_icon.set_name('sticky')
-        self.status_icon.set_icon_name('sticky-symbolic')
-        self.status_icon.set_tooltip_text('%s\n<i>%s</i>\n<i>%s</i>' % (_("Notes"),
-                                                                        _("Left click to toggle notes"),
-                                                                        _("Middle click to toggle the manager")))
-        self.status_icon.set_visible(True)
-        self.status_icon.connect('button-press-event', self.on_tray_button_pressed)
+        self.status_icon = create_tray_icon(self.get_dbus_connection(), 'sticky-symbolic', "Sticky",
+                                            '%s\n%s' % (_("Left click to toggle notes"),
+                                                         _("Middle click to toggle the manager")),
+                                            self.activate_notes, self.toggle_manager)
 
         self.rebuild_tray_context_menu()
-
-    def on_tray_button_pressed(self, icon, x, y , button, time, panel_position):
-        if button == 1:
-            self.activate_notes(time)
-        elif button == 2:
-            self.toggle_manager(time)
 
     def rebuild_tray_context_menu(self):
         if self.status_icon is None:
             return
 
-        self.group_buttons = {}
+        items = [
+            (_("New Note"), self.new_note, None),
+            (_("Manage Notes"), self.open_manager, None),
+            None
+        ]
 
-        self.context_menu = Gtk.Menu()
-        item = Gtk.MenuItem(label=_("New Note"))
-        item.connect('activate', self.new_note)
-        self.context_menu.append(item)
-
-        item = Gtk.MenuItem(label=_("Manage Notes"))
-        item.connect('activate', self.open_manager)
-        self.context_menu.append(item)
-
-        self.context_menu.append(Gtk.SeparatorMenuItem())
-
-        last_item = None
+        active_group = self.settings.get_string('active-group')
         for group in self.file_handler.get_note_group_names():
-            item = Gtk.RadioMenuItem(label=group)
+            items.append((group, lambda group=group: self.on_tray_group_selected(group), group == active_group))
 
-            if last_item is not None:
-                item.join_group(last_item)
+        items += [
+            None,
+            (_("Preferences"), self.open_settings_window, None),
+            None,
+            (_("Quit"), self.quit_app, None)
+        ]
 
-            if group == self.settings.get_string('active-group'):
-                item.set_active(True)
-
-            last_item = item
-
-            item.connect('activate', self.on_tray_group_selected, group)
-            self.context_menu.append(item)
-            self.group_buttons[group] = item
-
-        self.context_menu.append(Gtk.SeparatorMenuItem())
-
-        item = Gtk.MenuItem(label=_("Preferences"))
-        item.connect('activate', self.open_settings_window)
-        self.context_menu.append(item)
-
-        self.context_menu.append(Gtk.SeparatorMenuItem())
-
-        item = Gtk.MenuItem(label=_("Quit"))
-        item.connect('activate', self.quit_app)
-        self.context_menu.append(item)
-
-        self.context_menu.show_all()
-
-        self.status_icon.set_secondary_menu(self.context_menu)
+        self.status_icon.set_menu(items)
 
     def destroy_status_icon(self):
-        self.status_icon.set_visible(False)
+        self.status_icon.destroy()
         self.status_icon = None
 
     def update_tray_icon(self, *args):
@@ -964,16 +928,11 @@ class Application(Gtk.Application):
             self.open_manager()
             self.destroy_status_icon()
 
-    def on_tray_group_selected(self, widget, name):
+    def on_tray_group_selected(self, name):
         self.settings.set_string('active-group', name)
 
     def on_active_group_changed(self, settings, key):
-        group = settings.get_string('active-group')
-        if self.status_icon and not self.group_buttons[group].get_active():
-            self.settings.disconnect(self.active_group_changed_id)
-            self.group_buttons[group].set_active(True)
-            self.active_group_changed_id = self.settings.connect('changed::active-group', self.on_active_group_changed)
-
+        self.rebuild_tray_context_menu()
         self.change_visible_note_group()
 
     def update_dummy_window(self, *args):
@@ -1218,7 +1177,7 @@ class Application(Gtk.Application):
         dlg.set_transient_for(self.manager.window)
         dlg.set_modal(True)
         dlg.set_title(_("About"))
-        dlg.set_program_name(_("Notes"))
+        dlg.set_program_name("Sticky")
         dlg.set_comments(_("Take notes and stay organized"))
         dlg.set_license_type(Gtk.License.GPL_2_0)
         dlg.set_version("__DEB_VERSION__")

@@ -1,5 +1,6 @@
 [Desktop Entry]
-Name=Notes
+Name=Sticky
+GenericName=Notes
 Comment=Take notes and stay organized
 Exec=sticky
 Icon=sticky

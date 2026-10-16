@@ -1,13 +1,14 @@
 Source: sticky
 Section: x11
 Priority: optional
-Maintainer: Linux Mint <root@linuxmint.com>
+Maintainer: itotm <1804363+itotm@users.noreply.github.com>
 Build-Depends:
-    debhelper-compat (= 12),
+    debhelper-compat (= 13),
     dh-python,
     python3,
     meson (>=0.55)
-Standards-Version: 4.6.0
+Standards-Version: 4.7.2
+Homepage: https://github.com/itotm/sticky
 
 Package: sticky
 Architecture: all
@@ -21,6 +22,9 @@ Depends:
     python3-xapp (>= 2.2.0),
     ${misc:Depends},
     ${python3:Depends}
-Description: Sticky Notes app
- This package contains the Sticky Notes app, which allows the quick creation of 
- notes through an xapp status icon.
+Description: desktop notes with a KDE-style look
+ Sticky notes on the desktop, with groups, a manager window, formatting,
+ checklists, backups and a tray icon. Linux Mint's Sticky, changed to fit a
+ KDE Plasma desktop: notes with rounded corners like Breeze windows, a manager
+ with the KWin title bar, a toolbar like the KDE applications, softer note
+ colors and freedesktop icon names.

@@ -1,6 +1,6 @@
 # Sticky, KDE-style
 
-Fork of [linuxmint/sticky](https://github.com/linuxmint/sticky) that fits a KDE Plasma desktop on Fedora.
+Fork of [linuxmint/sticky](https://github.com/linuxmint/sticky) that fits a KDE Plasma desktop on Fedora and Debian.
 
 ![Sticky with the KDE-style manager and notes](docs/screenshot.png)
 
@@ -10,7 +10,9 @@ Fork of [linuxmint/sticky](https://github.com/linuxmint/sticky) that fits a KDE 
 - Softer, pastel note colors and highlight
 - The manager uses the KWin title bar instead of a GTK header bar, with a flat toolbar like the KDE applications (new, duplicate and delete on the left, search and menu on the right)
 - Group list and Preferences sidebar with KDE-style selection
-- Freedesktop icon names instead of the `xsi-*` icons, which Fedora does not ship, and an own bullet icon
+- Freedesktop icon names instead of the `xsi-*` icons, which Fedora and Debian do not ship, and an own bullet icon
+- The tray icon is a StatusNotifierItem, so Plasma shows it and its menu natively. Upstream's XApp icon falls back to XEmbed on Plasma, and under Wayland its clicks get lost. On desktops without a StatusNotifierItem host the XApp icon is still used
+- Called Sticky in every language, with "Notes" as the generic name
 
 ## Install on Fedora
 
@@ -27,6 +29,22 @@ To build the RPM in a Fedora container with podman:
 ```
 packaging/build-rpm.sh [fedora release]   # default: 44, output in dist/
 ```
+
+## Install on Debian 13
+
+Download the .deb from the [releases](https://github.com/itotm/sticky/releases) and install it:
+
+```
+sudo apt install ./sticky_*_all.deb
+```
+
+To build the .deb in a Debian container with podman:
+
+```
+packaging/build-deb.sh [debian release]   # default: 13, output in dist/
+```
+
+The package uses the `debian/` directory. For a new release add an entry at the top of `debian/changelog` with the version `<meson version>+kde<n>`, for example `1.33+kde2`; the script refuses to build if it does not match `meson.build`.
 
 The upstream README follows.
 
