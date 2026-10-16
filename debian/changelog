@@ -1,3 +1,11 @@
+sticky (1.33+kde2) trixie; urgency=medium
+
+  * Notes reopen where they were moved instead of at their old position
+  * Notes no longer grow by the shadow size each time they are hidden and
+    shown
+
+ -- itotm <1804363+itotm@users.noreply.github.com>  Fri, 16 Oct 2026 11:26:32 +0200
+
 sticky (1.33+kde1) trixie; urgency=medium
 
   * First build for Debian 13, based on Linux Mint's Sticky 1.33
