@@ -11,6 +11,7 @@ Fork of [linuxmint/sticky](https://github.com/linuxmint/sticky) that fits a KDE 
 - The manager uses the KWin title bar instead of a GTK header bar, with a flat toolbar like the KDE applications (new, duplicate and delete on the left, search and menu on the right)
 - Group list and Preferences sidebar with KDE-style selection
 - Freedesktop icon names instead of the `xsi-*` icons, which Fedora and Debian do not ship, and an own bullet icon
+- Breeze icons in the note title bar, Breeze-style check boxes, and a new app and tray icon in the Breeze style
 - The tray icon is a StatusNotifierItem, so Plasma shows it and its menu natively. Upstream's XApp icon falls back to XEmbed on Plasma, and under Wayland its clicks get lost. On desktops without a StatusNotifierItem host the XApp icon is still used
 - Called Sticky in every language, with "Notes" as the generic name
 
@@ -151,5 +152,10 @@ Please use Launchpad to translate Sticky Notes: https://translations.launchpad.n
 
 The PO files in this project are imported from there.
 
+## Acknowledgements
+
+The changes in this fork were developed with the help of an LLM (Claude).
+
 ## License
 - Code: GPLv2
+- The note title bar icons (`usr/share/icons/hicolor/scalable/status/sticky-{add,color,delete,edit,text}.svg`) come from the [Breeze icon theme](https://invent.kde.org/frameworks/breeze-icons): Copyright 2014 Uri Herrera and others, LGPLv3 or later

@@ -26,8 +26,10 @@ builder() {
     fi
 }
 
-# Under the source tree and not in /tmp, which the Flathub builder doesn't share
-state="$root/.flatpak-builder"
+# Not in /tmp, which the Flathub builder doesn't share, and not under the source
+# tree: the build root has symlinks to /run, and editors that follow them crawl
+# the whole filesystem
+state="${XDG_CACHE_HOME:-$HOME/.cache}/sticky-flatpak-builder"
 work="$state/work"
 out="$root/dist"
 rm -rf "$work"

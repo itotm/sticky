@@ -18,3 +18,20 @@ License: GPL-2
  .
  On Debian systems, the complete text of the GNU General
  Public License can be found in `/usr/share/common-licenses/GPL'
+
+Files: usr/share/icons/hicolor/scalable/status/sticky-add.svg
+ usr/share/icons/hicolor/scalable/status/sticky-color.svg
+ usr/share/icons/hicolor/scalable/status/sticky-delete.svg
+ usr/share/icons/hicolor/scalable/status/sticky-edit.svg
+ usr/share/icons/hicolor/scalable/status/sticky-text.svg
+Copyright: 2014 Uri Herrera <uri_herrera@nitrux.in> and others
+License: LGPL-3+
+ These icons come from the Breeze icon theme of KDE.
+ .
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 3 of the License, or (at your option) any later version.
+ .
+ On Debian systems, the complete text of the GNU Lesser General
+ Public License version 3 can be found in `/usr/share/common-licenses/LGPL-3'

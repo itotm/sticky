@@ -1,9 +1,9 @@
 Name:           sticky
 Version:        1.33
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Sticky notes app with a KDE-style look
 
-License:        GPL-2.0-only
+License:        GPL-2.0-only AND LGPL-3.0-or-later
 URL:            https://github.com/itotm/sticky
 Source0:        %{name}-%{version}.tar.gz
 
@@ -62,6 +62,10 @@ desktop-file-validate %{buildroot}%{_sysconfdir}/xdg/autostart/sticky.desktop
 %config(noreplace) %{_sysconfdir}/xdg/autostart/sticky.desktop
 
 %changelog
+* Tue Oct 27 2026 itotm <1804363+itotm@users.noreply.github.com> - 1.33-5
+- Breeze icons in the note title bar and Breeze-style check boxes
+- New app and tray icon in the Breeze style
+
 * Fri Oct 16 2026 itotm <1804363+itotm@users.noreply.github.com> - 1.33-4
 - Find the data files from the install prefix, for the new Flatpak build
 - Native file dialogs for import and export

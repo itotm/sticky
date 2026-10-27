@@ -1,3 +1,10 @@
+sticky (1.33+kde4) trixie; urgency=medium
+
+  * Breeze icons in the note title bar and Breeze-style check boxes
+  * New app and tray icon in the Breeze style
+
+ -- itotm <1804363+itotm@users.noreply.github.com>  Tue, 27 Oct 2026 22:15:00 +0100
+
 sticky (1.33+kde3) trixie; urgency=medium
 
   * Find the data files from the install prefix, for the new Flatpak build
